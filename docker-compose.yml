@@ -1,0 +1,35 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: PL/PL.Server/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Database=InsuranceManagment;User Id=sa;Password=Welcome01#QAZ;TrustServerCertificate=True
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: .
+      dockerfile: PL/pl.client/Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - server
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: insurance-sql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Welcome01#QAZ
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
