@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=db;Database=InsuranceManagment;User Id=sa;Password="Welcome01#QAZ";TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=db;Database=InsuranceManagment;User Id=sa;Password=Welcome01#QAZ;TrustServerCertificate=True
     depends_on:
       - db
 
@@ -25,7 +25,7 @@ services:
     container_name: insurance-sql
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD="Welcome01#QAZ"
+      - MSSQL_SA_PASSWORD=Welcome01#QAZ
     ports:
       - "1433:1433" 
     volumes:
