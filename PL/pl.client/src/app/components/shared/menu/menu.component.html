@@ -1,0 +1,36 @@
+<mat-toolbar color="primary" class="navbar shadow-sm sticky-top">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <div class="brand d-flex align-items-center cursor-pointer" routerLink="/">
+      <mat-icon class="me-2">policy</mat-icon>
+      <span class="fw-bold">Administración de Seguros</span>
+    </div>
+
+    <nav class="d-none d-md-flex gap-2">
+      <button mat-button routerLink="/clients" routerLinkActive="active-link">
+        <mat-icon>group</mat-icon> Clientes
+      </button>
+      <button mat-button routerLink="/policies" routerLinkActive="active-link">
+        <mat-icon>assignment</mat-icon> Pólizas
+      </button>
+    </nav>
+
+    <div class="d-flex d-md-none">
+      <button mat-icon-button [matMenuTriggerFor]="mainMenu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-menu #mainMenu="matMenu">
+        <button mat-menu-item routerLink="/clients">
+          <mat-icon>group</mat-icon>
+          <span>Clientes</span>
+        </button>
+        <button mat-menu-item routerLink="/policies">
+          <mat-icon>assignment</mat-icon>
+          <span>Pólizas</span>
+        </button>
+      </mat-menu>
+    </div>
+
+  </div>
+</mat-toolbar>

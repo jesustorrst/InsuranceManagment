@@ -1,0 +1,49 @@
+/* Estilo del Hero Icon */
+.hero-icon {
+  font-size: 180px !important;
+  width: 180px !important;
+  height: 180px !important;
+  opacity: 0.8;
+}
+
+/* Caja del icono dentro de las cards */
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+/* Efecto Elevación en las Cards */
+.action-card {
+  cursor: pointer;
+  border: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+  .action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+  }
+
+/* Colores de fondo suaves usando Bootstrap classes extendidas */
+.bg-primary-subtle {
+  background-color: #cfe2ff;
+}
+
+.bg-warning-subtle {
+  background-color: #fff3cd;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
+    text-align: center;
+  }
+
+  .lead {
+    text-align: center;
+  }
+}

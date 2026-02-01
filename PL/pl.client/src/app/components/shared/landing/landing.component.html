@@ -1,0 +1,49 @@
+<div class="container mt-5 pt-3">
+
+  <div class="row align-items-center mb-5 py-4 bg-light rounded-4 shadow-sm">
+    <div class="col-lg-7 px-5">
+      <h1 class="display-4 fw-bold text-dark">Panel de Control <span class="text-primary">Seguros</span></h1>
+    </div>
+    <div class="col-lg-5 d-none d-lg-block text-center">
+      <mat-icon class="hero-icon text-primary">shield_with_heart</mat-icon>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6">
+      <mat-card class="action-card h-100 p-3" routerLink="/clients">
+        <mat-card-header>
+          <div mat-card-avatar class="icon-box bg-primary-subtle">
+            <mat-icon color="primary">group</mat-icon>
+          </div>
+          <mat-card-title>Gestión de Clientes</mat-card-title>
+          <mat-card-subtitle>HU01 - Administración</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="mt-3">
+          <p>Registro de nuevos clientes, edición de perfiles y visualización de la base de datos completa.</p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-button color="primary">ENTRAR <mat-icon>arrow_forward</mat-icon></button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <mat-card class="action-card h-100 p-3" routerLink="/policies">
+        <mat-card-header>
+          <div mat-card-avatar class="icon-box bg-warning-subtle">
+            <mat-icon class="text-warning">description</mat-icon>
+          </div>
+          <mat-card-title>Control de Pólizas</mat-card-title>
+          <mat-card-subtitle>HU02 - Operaciones</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="mt-3">
+          <p>Consulta de pólizas activas, asignación de coberturas y seguimiento de estados de seguros.</p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-button color="accent">GESTIONAR <mat-icon>arrow_forward</mat-icon></button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
