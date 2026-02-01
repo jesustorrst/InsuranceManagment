@@ -5,8 +5,9 @@ namespace PL.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Cliente : ControllerBase
+    public class ClienteController : ControllerBase
     {
 
+      
     }
 }
