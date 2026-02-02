@@ -1,0 +1,146 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-9">
+      <div class="card shadow border-0">
+
+        <div class="card-header bg-white py-3 border-bottom">
+          <h3 class="m-0 text-primary fw-bold d-flex align-items-center">
+            <i class="bi" [ngClass]="isEdit ? 'bi-pencil-square' : 'bi-person-plus-fill'"></i>
+            <span class="ms-2">{{ isEdit ? 'Editar Cliente' : 'Nuevo Cliente' }}</span>
+          </h3>
+        </div>
+
+        <div class="card-body p-4">
+          <form [formGroup]="form" (ngSubmit)="guardar()">
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary text-start d-block">Número de identificación</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white"
+                        [class.border-danger]="form.get('numeroIdentificacion')?.invalid && form.get('numeroIdentificacion')?.touched">
+                    <i class="bi bi-hash"></i>
+                  </span>
+
+                  <input type="text"
+                         class="form-control"
+                         [class.is-invalid]="form.get('numeroIdentificacion')?.invalid && form.get('numeroIdentificacion')?.touched"
+                         formControlName="numeroIdentificacion"
+                         placeholder="10 dígitos numéricos"
+                         maxlength="10"> <div class="invalid-feedback text-start">
+                    <span *ngIf="form.get('numeroIdentificacion')?.hasError('required')">
+                      La identificación es obligatoria.
+                    </span>
+                    <span *ngIf="form.get('numeroIdentificacion')?.hasError('pattern')">
+                      Solo se permiten números.
+                    </span>
+                    <span *ngIf="form.get('numeroIdentificacion')?.hasError('minlength') && !form.get('numeroIdentificacion')?.hasError('pattern')">
+                      Debe tener exactamente 10 dígitos (faltan {{ 10 - form.get('numeroIdentificacion')?.value?.length }}).
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary text-start d-block">Nombre(s)</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white" [class.border-danger]="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+                    <i class="bi bi-person"></i>
+                  </span>
+                  <input type="text" class="form-control" [class.is-invalid]="form.get('nombre')?.invalid && form.get('nombre')?.touched"
+                         formControlName="nombre" placeholder="Escribe el nombre">
+
+                  <div class="invalid-feedback text-start">
+                    <span *ngIf="form.get('nombre')?.hasError('pattern')">
+                      No se permiten números ni carácteres especiales.
+                    </span>
+                    <span *ngIf="form.get('nombre')?.hasError('required') && !form.get('nombre')?.hasError('pattern')">
+                      El nombre es obligatorio.
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary text-start d-block">Apellido paterno</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white" [class.border-danger]="form.get('apellidoPaterno')?.invalid && form.get('apellidoPaterno')?.touched">
+                    <i class="bi bi-person-vcard"></i>
+                  </span>
+                  <input type="text" class="form-control" [class.is-invalid]="form.get('apellidoPaterno')?.invalid && form.get('apellidoPaterno')?.touched"
+                         formControlName="apellidoPaterno">
+                  <div class="invalid-feedback text-start">
+                    <span *ngIf="form.get('apellidoPaterno')?.hasError('pattern')">
+                      No se permiten números ni carácteres especiales.
+                    </span>
+                    <span *ngIf="form.get('apellidoPaterno')?.hasError('required') && !form.get('apellidoPaterno')?.hasError('pattern')">
+                      El nombre es obligatorio.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-secondary text-start d-block">Apellido materno</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white"
+                        [class.border-danger]="form.get('apellidoMaterno')?.invalid && form.get('apellidoMaterno')?.dirty">
+                    <i class="bi bi-person-vcard-fill"></i>
+                  </span>
+
+                  <input type="text"
+                         class="form-control"
+                         [class.is-invalid]="form.get('apellidoMaterno')?.invalid && form.get('apellidoMaterno')?.dirty"
+                         formControlName="apellidoMaterno"
+                         placeholder="(Opcional)">
+
+                  <div class="invalid-feedback text-start"
+                       [style.display]="form.get('apellidoMaterno')?.invalid && form.get('apellidoMaterno')?.dirty ? 'block' : 'none'">
+                    <span *ngIf="form.get('apellidoMaterno')?.hasError('pattern')">
+                      No se permiten números ni carácteres especiales.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <label class="form-label fw-bold text-secondary text-start d-block">Correo electrónico</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white" [class.border-danger]="form.get('email')?.invalid && form.get('email')?.touched">
+                    <i class="bi bi-envelope-at"></i>
+                  </span>
+                  <input type="email" class="form-control" [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+                         formControlName="email" placeholder="usuario@ejemplo.com">
+                  <div class="invalid-feedback text-start">Ingrese un correo electrónico válido.</div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label fw-bold text-secondary text-start d-block">Teléfono</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white" [class.border-danger]="form.get('telefono')?.invalid && form.get('telefono')?.touched">
+                    <i class="bi bi-telephone"></i>
+                  </span>
+                  <input type="text" class="form-control" [class.is-invalid]="form.get('telefono')?.invalid && form.get('telefono')?.touched"
+                         formControlName="telefono" placeholder="10 dígitos">
+                  <div class="invalid-feedback text-start">Mínimo 10 dígitos numéricos.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5 pt-3 border-top">
+              <button type="button" class="btn btn-danger px-4 shadow-sm d-inline-flex align-items-center" routerLink="/clientes">
+                <i class="bi bi-x-circle me-2"></i> Cancelar
+              </button>
+              <button type="submit" class="btn btn-success px-4 shadow-sm d-inline-flex align-items-center" [disabled]="form.invalid">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ isEdit ? 'Actualizar' : 'Guardar' }}
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

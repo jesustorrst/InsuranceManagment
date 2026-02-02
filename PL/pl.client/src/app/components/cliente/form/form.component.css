@@ -1,0 +1,63 @@
+/* Contenedor principal */
+.card {
+  border-radius: 15px;
+}
+
+/* Estilo base de los inputs */
+.form-control {
+  border: 1px solid #e2e8f0;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+}
+
+/* Manejo de bordes redondeados en grupos (Para que no se vea doble borde curvo) */
+.input-group .input-group-text {
+  border-radius: 8px 0 0 8px; /* Redondea solo izquierda */
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.input-group .form-control {
+  border-radius: 0 8px 8px 0; /* Redondea solo derecha */
+  border-left: none; /* Evita doble línea central */
+}
+
+/* Efecto Focus (Cuando el usuario escribe) */
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  border-color: #3b82f6;
+}
+
+.form-control:focus {
+  box-shadow: none; /* Quitamos sombra para que no se vea raro en el grupo */
+}
+
+/* --- VALIDACIONES (El truco para el rojo total) --- */
+
+/* Cuando el input falla, iluminamos el icono de la izquierda */
+.input-group:has(.is-invalid) .input-group-text {
+  border-color: #dc3545 !important;
+  color: #dc3545;
+  background-color: #fff8f8;
+}
+
+/* Cuando el input falla, el borde del input se pone rojo */
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+  background-image: none; /* Quitamos el icono de exclamación de Bootstrap si estorba */
+}
+
+.invalid-feedback {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #dc3545;
+  margin-top: 5px;
+}
+
+/* Botones */
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
