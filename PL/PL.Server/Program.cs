@@ -11,6 +11,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<Data.DAL.ClienteDAL>();
 builder.Services.AddScoped<Business.ClienteBLL>();
+
+builder.Services.AddScoped<Business.PolizaBLL>();
+builder.Services.AddScoped<Data.DAL.PolizaDAL>();
+
 builder.Services.AddDbContext<Data.InsuranceManagmentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

@@ -15,6 +15,22 @@ namespace PL.Server.Controllers
             _clienteService = clienteService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _clienteService.GetAll();
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClienteDTO clienteDTO)
         {
@@ -36,21 +52,7 @@ namespace PL.Server.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _clienteService.GetAll();
-
-            if (result.Correct)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
-
+       
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

@@ -12,11 +12,11 @@ namespace Business
 {
     public class ClienteBLL
     {
-        private readonly Data.DAL.ClienteDAL _clienteRepo;
+        private readonly Data.DAL.ClienteDAL _clienteDAL;
 
         public ClienteBLL(Data.DAL.ClienteDAL clienteRepo)
         {
-            _clienteRepo = clienteRepo;
+            _clienteDAL = clienteRepo;
         }
         public async Task<Result<int>> Add(Models.DTO.ClienteDTO dto)
         {
@@ -36,13 +36,13 @@ namespace Business
                 Eliminado = false
             };
 
-            return await _clienteRepo.Add(entidad);
+            return await _clienteDAL.Add(entidad);
         }
 
 
         public async Task<Result<Cliente>> GetAll()
         {
-            return await _clienteRepo.GetAll();
+            return await _clienteDAL.GetAll();
         }
 
         public async Task<Result<Cliente>> GetById(int id)
@@ -51,13 +51,14 @@ namespace Business
             {
                 return new Result<Cliente> { Correct = false, ErrorMessage = "Id no válido." };
             }
-            return await _clienteRepo.GetById(id);
+            return await _clienteDAL.GetById(id);
         }
 
         public async Task<Result<bool>> Update(int id, ClienteDTO dto)
         {
 
-            var existingResult = await _clienteRepo.GetById(id);
+            var existingResult = await _clienteDAL.GetById(id);
+
             if (!existingResult.Correct || existingResult.Object == null)
             {
                 return new Result<bool> { Correct = false, ErrorMessage = "El cliente no existe." };
@@ -74,12 +75,12 @@ namespace Business
             entidad.FechaActualizacion = DateTime.Now;
             entidad.ActualizadoPor = 1; 
 
-            return await _clienteRepo.Update(entidad);
+            return await _clienteDAL.Update(entidad);
         }
 
         public async Task<Result<bool>> Delete(int id)
         {
-            var existingResult = await _clienteRepo.GetById(id);
+            var existingResult = await _clienteDAL.GetById(id);
 
             if (!existingResult.Correct || existingResult.Object == null)
             {
@@ -91,7 +92,7 @@ namespace Business
             entidad.FechaActualizacion = DateTime.Now;
             entidad.ActualizadoPor = 1;
 
-            return await _clienteRepo.Update(entidad);
+            return await _clienteDAL.Update(entidad);
         }
 
 
