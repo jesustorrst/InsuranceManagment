@@ -29,20 +29,19 @@ export class ClienteFormComponent implements OnInit {
       idCliente: [0],
       numeroIdentificacion: ['', [
         Validators.required,
-        Validators.pattern('^[0-9]*$'), // Solo números
+        Validators.pattern('^[0-9]*$'),
         Validators.minLength(10),
         Validators.maxLength(10)
       ]],
       nombre: ['', [
         Validators.required,
-        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/) // Quitamos el * y ponemos + para obligar contenido
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/) 
       ]],
       apellidoPaterno: ['', [
         Validators.required,
         Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)
       ]],
       apellidoMaterno: ['', [
-        // Aquí NO ponemos required, pero SI el pattern
         Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)
       ]],
 
@@ -50,7 +49,33 @@ export class ClienteFormComponent implements OnInit {
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
 
-  //  this.idCliente = Number(this.aRoute.snapshot.paramMap.get('id'));
+  }
+
+
+  isInvalid(field: string): boolean {
+    const control = this.form.get(field);
+    if (field === 'apellidoMaterno') {
+      return !!(control && control.invalid && control.dirty);
+    }
+    return !!(control && control.invalid && control.touched);
+  }
+
+  getErrorMessage(field: string): string {
+    const control = this.form.get(field);
+    if (!control || !control.errors) return '';
+
+    if (control.hasError('required')) return 'Este campo es obligatorio.';
+    if (control.hasError('pattern')) {
+      if (field === 'email') return 'Formato de correo no válido.';
+      if (field === 'numeroIdentificacion' || field === 'telefono') return 'Solo se permiten números.';
+      return 'No se permiten números ni carácteres especiales.';
+    }
+    if (control.hasError('minlength') || control.hasError('maxlength')) {
+      return `Debe tener exactamente 10 dígitos.`;
+    }
+    if (control.hasError('email')) return 'Ingrese un correo electrónico válido.';
+
+    return 'Campo inválido.';
   }
 
   ngOnInit(): void {
@@ -66,7 +91,7 @@ export class ClienteFormComponent implements OnInit {
   obtenerCliente(idCliente: number) {
     this._clienteService.getById(idCliente).subscribe(result => {
       if (result.correct && result.object) {
-        this.form.patchValue(result.object); // Rellenamos el formulario
+        this.form.patchValue(result.object); 
       }
     });
   }
