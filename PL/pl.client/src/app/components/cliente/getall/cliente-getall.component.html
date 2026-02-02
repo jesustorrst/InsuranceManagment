@@ -1,15 +1,34 @@
 <div class="container mt-5">
   <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
-      <h3 class="m-0 text-primary fw-bold d-flex align-items-center">
-        <i class="bi bi-people-fill"></i>
-        <span class="ms-2">Gestión de Clientes</span>
+      <h3 class="m-0 text-primary fw-bold">
+        <i class="bi bi-people-fill me-2"></i>Gestión de Clientes
       </h3>
-
-      <button class="btn btn-primary px-4 shadow-sm d-inline-flex align-items-center" [routerLink]="['/cliente/form']">
-        <i class="bi bi-person-plus-fill me-2"></i>
-        Nuevo Cliente
+      <button class="btn btn-primary shadow-sm" [routerLink]="['/cliente/form']">
+        <i class="bi bi-person-plus-fill me-2"></i>Nuevo Cliente
       </button>
+    </div>
+
+    <div class="card-body bg-light border-bottom py-3">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="input-group shadow-sm">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input type="text"
+                   class="form-control border-start-0"
+                   placeholder="Buscar por nombre, ID o email..."
+                   [(ngModel)]="searchTerm"
+                   (input)="filtrarClientes()">
+          </div>
+        </div>
+        <div class="col-md-7 text-end align-self-center">
+          <span class="badge bg-secondary">
+            Total: {{ clientes.length }} registros
+          </span>
+        </div>
+      </div>
     </div>
 
     <div class="card-body p-0">
@@ -17,34 +36,33 @@
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
-              <th class="ps-4 py-3 text-secondary small fw-bold">IDENTIFICACIÓN</th>
-              <th class="py-3 text-secondary small fw-bold">NOMBRE</th>
-              <th class="py-3 text-secondary small fw-bold">EMAIL</th>
-              <th class="py-3 text-secondary small fw-bold">TELÉFONO</th>
-              <th class="text-center pe-4 py-3 text-secondary small fw-bold">ACCIONES</th>
+              <th class="ps-4">IDENTIFICACIÓN</th>
+              <th>NOMBRE COMPLETO</th>
+              <th>EMAIL</th>
+              <th class="text-center">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let cliente of clientes">
-              <td class="ps-4 text-dark">{{ cliente.numeroIdentificacion }}</td>
-              <td class="text-dark">
-                <span class="fw-bold">{{ cliente.nombre }} {{ cliente.apellidoPaterno }} {{ cliente.apellidoMaterno || '' }}</span>
+              <td class="ps-4">{{ cliente.numeroIdentificacion }}</td>
+              <td class="fw-bold">
+                {{ cliente.nombre }} {{ cliente.apellidoPaterno }} {{ cliente.apellidoMaterno }}
               </td>
-              <td class="text-dark">{{ cliente.email }}</td>
-              <td class="text-dark">{{ cliente.telefono }}</td>
-
-              <td class="text-center pe-4">
-                <button class="btn btn-outline-warning btn-sm me-2 d-inline-flex align-items-center"
+              <td>{{ cliente.email }}</td>
+              <td class="text-center">
+                <button class="btn btn-outline-warning btn-sm me-2"
                         [routerLink]="['/cliente/form', cliente.idCliente]">
-                  <i class="bi bi-pencil-square me-1"></i>
-                  Editar
+                  <i class="bi bi-pencil"></i>
                 </button>
-
-                <button class="btn btn-outline-danger btn-sm d-inline-flex align-items-center"
+                <button class="btn btn-outline-danger btn-sm"
                         (click)="eliminar(cliente.idCliente)">
-                  <i class="bi bi-trash3-fill me-1"></i>
-                  Eliminar
+                  <i class="bi bi-trash"></i>
                 </button>
+              </td>
+            </tr>
+            <tr *ngIf="clientes.length === 0">
+              <td colspan="4" class="text-center py-4 text-muted">
+                No se encontraron clientes que coincidan con la búsqueda.
               </td>
             </tr>
           </tbody>

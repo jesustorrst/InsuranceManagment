@@ -8,7 +8,7 @@ import { Cliente } from '../../../models/cliente.model';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-getall',
+  selector: 'app-poliza-getall',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './poliza-getall.component.html',
@@ -19,7 +19,6 @@ export class GetallComponent implements OnInit {
   clientes: Cliente[] = [];
   polizas: Poliza[] = [];
 
-  // Cambio clave: ahora es de tipo Cliente o null
   public clienteSeleccionado: Cliente | null = null;
   loadingClientes: boolean = false;
   loadingPolizas: boolean = false;
@@ -39,27 +38,22 @@ export class GetallComponent implements OnInit {
       next: (result) => {
         if (result.correct && result.objects) {
           this.clientes = result.objects;
-        } else {
-          Swal.fire('Error', result.errorMessage || 'No se pudieron obtener los clientes', 'error');
         }
         this.loadingClientes = false;
       },
-      error: (err) => {
-        Swal.fire('Error', 'Error de conexión con el servidor', 'error');
+      error: () => {
         this.loadingClientes = false;
+        Swal.fire('Error', 'No se pudieron obtener los clientes', 'error');
       }
     });
   }
 
   seleccionarCliente(cliente: Cliente): void {
-    if (!cliente || !cliente.idCliente) {
-      Swal.fire('Error', 'Cliente inválido.', 'error');
-      return;
-    }
+    if (!cliente || !cliente.idCliente) return;
 
     this.clienteSeleccionado = cliente;
     this.loadingPolizas = true;
-    this.polizas = []; 
+    this.polizas = [];
 
     this.polizaService.getByIdCliente(cliente.idCliente).subscribe({
       next: (result) => {
@@ -70,33 +64,26 @@ export class GetallComponent implements OnInit {
         }
         this.loadingPolizas = false;
       },
-      error: (err) => {
-        console.error('Error al cargar pólizas', err);
-        Swal.fire('Error', 'No se pudieron obtener las pólizas', 'error');
+      error: () => {
         this.loadingPolizas = false;
+        Swal.fire('Error', 'No se pudieron obtener las pólizas', 'error');
       }
     });
   }
 
   eliminarPoliza(id: number): void {
     Swal.fire({
-      title: '¿Deseas eliminar esta póliza?',
+      title: '¿Eliminar póliza?',
       text: "Esta acción no se puede deshacer",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.polizaService.delete(id).subscribe({
           next: (res) => {
-            if (res.correct) {
-              Swal.fire('Eliminado', 'La póliza ha sido eliminada.', 'success');
-              if (this.clienteSeleccionado) {
-                this.seleccionarCliente(this.clienteSeleccionado);
-              }
+            if (res.correct && this.clienteSeleccionado) {
+              this.seleccionarCliente(this.clienteSeleccionado);
             }
           }
         });

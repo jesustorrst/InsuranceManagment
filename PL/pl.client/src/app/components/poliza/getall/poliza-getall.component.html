@@ -17,12 +17,13 @@
           </thead>
           <tbody>
             <tr *ngFor="let cliente of clientes"
+                (click)="seleccionarCliente(cliente)"
                 [class.table-primary]="clienteSeleccionado?.idCliente === cliente.idCliente"
                 style="cursor: pointer;">
               <td class="ps-4">{{ cliente.numeroIdentificacion }}</td>
               <td class="fw-bold">{{ cliente.nombre }} {{ cliente.apellidoPaterno }}</td>
               <td class="text-center">
-                <button class="btn btn-sm btn-primary" (click)="seleccionarCliente(cliente)">
+                <button class="btn btn-sm btn-primary">
                   <i class="bi bi-search me-1"></i> Ver Pólizas
                 </button>
               </td>
@@ -38,10 +39,10 @@
       <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
         <h4 class="m-0">
           <i class="bi bi-shield-lock-fill me-2"></i>
-          Pólizas de: {{ clienteSeleccionado?.nombre }} {{ clienteSeleccionado?.apellidoPaterno }}
+          Pólizas de: {{ clienteSeleccionado.nombre }} {{ clienteSeleccionado.apellidoPaterno }}
         </h4>
         <button class="btn btn-light btn-sm fw-bold"
-                [routerLink]="'/poliza/form/' + clienteSeleccionado?.idCliente">
+                [routerLink]="['/poliza/form', clienteSeleccionado.idCliente]">
           <i class="bi bi-plus-lg me-1"></i> Nueva Póliza
         </button>
       </div>
@@ -66,8 +67,6 @@
               <tr *ngFor="let poliza of polizas">
                 <td class="ps-4">
                   <span class="fw-bold text-dark">{{ poliza.nombreTipoPoliza }}</span>
-                  <br>
-                  <small class="text-muted">{{ poliza.descripcionTipoPoliza }}</small>
                 </td>
                 <td class="fw-bold text-success">{{ poliza.montoAsegurado | currency }}</td>
                 <td>{{ poliza.fechaInicio | date:'shortDate' }} - {{ poliza.fechaFin | date:'shortDate' }}</td>
@@ -78,7 +77,8 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <button class="btn btn-outline-warning btn-sm me-2" [routerLink]="['/poliza/form', clienteSeleccionado?.idCliente, poliza.idPoliza]">
+                  <button class="btn btn-outline-warning btn-sm me-2"
+                          [routerLink]="['/poliza/form', clienteSeleccionado.idCliente, poliza.idPoliza]">
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button class="btn btn-outline-danger btn-sm" (click)="eliminarPoliza(poliza.idPoliza)">
