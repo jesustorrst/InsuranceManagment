@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <div class="card shadow border-0">
+    <div class="card-header bg-primary text-white">
+      <h3 class="m-0">{{ isEdit ? 'Editar' : 'Nueva' }} Póliza</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Tipo de Póliza</label>
+            <select class="form-select" name="idTipoPoliza" [(ngModel)]="poliza.idTipoPoliza" required>
+              <option value="0" disabled>Seleccione un tipo...</option>
+              <option *ngFor="let tipo of tiposPoliza" [value]="tipo.id">{{ tipo.nombre }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Monto Asegurado</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number" class="form-control" name="monto" [(ngModel)]="poliza.montoAsegurado">
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Fecha de Inicio</label>
+            <input type="date" class="form-control" name="inicio" [(ngModel)]="poliza.fechaInicio">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Fecha de Vencimiento</label>
+            <input type="date" class="form-control" name="fin" [(ngModel)]="poliza.fechaFin">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Estado</label>
+            <select class="form-select" name="estado" [(ngModel)]="poliza.estado">
+              <option value="Activa">Activa</option>
+              <option value="Inactiva">Inactiva</option>
+              <option value="Vencida">Vencida</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary"
+                  [routerLink]="['/poliza/cliente', poliza.idCliente]">
+            <i class="bi bi-arrow-left"></i> Regresar
+          </button>
+
+          <button type="submit" class="btn btn-success px-4 fw-bold">
+            <i class="bi bi-save me-1"></i> {{ isEdit ? 'Guardar Cambios' : 'Registrar Póliza' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GetallComponent } from './getall.component';
+import { GetallComponent } from './cliente-getall.component';
 
 describe('GetallComponent', () => {
   let component: GetallComponent;

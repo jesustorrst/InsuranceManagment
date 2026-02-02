@@ -10,8 +10,8 @@ import Swal from 'sweetalert2';
   selector: 'app-cliente-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  templateUrl: './cliente-form.component.html',
+  styleUrls: ['./cliente-form.component.css']
 })
 export class ClienteFormComponent implements OnInit {
   form: FormGroup;
@@ -105,14 +105,14 @@ export class ClienteFormComponent implements OnInit {
       this._clienteService.update(this.idCliente!, cliente).subscribe(res => {
         if (res.correct) {
           Swal.fire('Actualizado', 'Cliente actualizado con éxito', 'success');
-          this.router.navigate(['/clientes']);
+          this.router.navigate(['/cliente']);
         }
       });
     } else {
       this._clienteService.add(cliente).subscribe(res => {
         if (res.correct) {
           Swal.fire('Registrado', 'Cliente registrado con éxito', 'success');
-          this.router.navigate(['/clientes']);
+          this.router.navigate(['/cliente']);
         }
       });
     }

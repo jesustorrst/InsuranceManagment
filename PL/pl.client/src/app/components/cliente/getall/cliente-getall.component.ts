@@ -9,8 +9,8 @@ import Swal from 'sweetalert2';
   selector: 'app-getall',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './getall.component.html',
-  styleUrl: './getall.component.css'
+  templateUrl: './cliente-getall.component.html',
+  styleUrl: './cliente-getall.component.css'
 })
 export class GetallComponent implements OnInit {
 
