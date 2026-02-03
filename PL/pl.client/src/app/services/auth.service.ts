@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,9 @@ import { Router } from '@angular/router';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
+  isLoggedIn$ = this.loggedIn.asObservable();
 
   private apiUrl = `${environment.apiUrl}/Usuario`;
 
@@ -22,12 +26,12 @@ export class AuthService {
 
           localStorage.setItem('token', info.token);
           localStorage.setItem('rol', info.rol);
-
-
+         
           if (info.idCliente) {
             localStorage.setItem('idCliente', info.idCliente.toString());
           }
 
+          this.loggedIn.next(true);
         }
       })
     );
@@ -43,9 +47,8 @@ export class AuthService {
 
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('idCliente');
+    localStorage.clear();
+    this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
 

@@ -1,24 +1,37 @@
-<mat-toolbar *ngIf="authService.isLoggedIn()" color="primary" class="navbar shadow-sm sticky-top">
+<mat-toolbar *ngIf="authService.isLoggedIn$ | async" color="primary" class="navbar shadow-sm sticky-top">
   <div class="container d-flex align-items-center justify-content-between">
 
     <div class="brand d-flex align-items-center cursor-pointer" routerLink="/">
       <mat-icon class="me-2">policy</mat-icon>
-      <span class="fw-bold">Administración de Seguros</span>
+      <span class="fw-bold">Seguros App</span>
     </div>
 
     <nav class="d-none d-md-flex gap-2">
-      <button mat-button *ngIf="authService.getStoredRol() === '1'" routerLink="/cliente" routerLinkActive="active-link">
-        <mat-icon>group</mat-icon> Clientes
-      </button>
-      <button mat-button *ngIf="authService.getStoredRol() === '1'" routerLink="/poliza" routerLinkActive="active-link">
-        <mat-icon>assignment</mat-icon> Pólizas
-      </button>
+      <ng-container *ngIf="authService.getStoredRol() === '1'">
+        <button mat-button routerLink="/cliente" routerLinkActive="active-link">
+          <mat-icon>group</mat-icon> Clientes
+        </button>
+        <button mat-button routerLink="/poliza" routerLinkActive="active-link">
+          <mat-icon>assignment</mat-icon> Pólizas
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="authService.getStoredRol() === '2'">
+        <button mat-button routerLink="/poliza" routerLinkActive="active-link">
+          <mat-icon>security</mat-icon> Mis Pólizas
+        </button>
+        <button mat-button routerLink="/cliente/form" routerLinkActive="active-link">
+          <mat-icon>person_edit</mat-icon> Mi Perfil
+        </button>
+      </ng-container>
     </nav>
 
     <div class="d-flex align-items-center">
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
-        <span class="ms-2 d-none d-sm-inline">{{ authService.getStoredRol() }}</span>
+        <span class="ms-2 d-none d-sm-inline">
+          {{ authService.getStoredRol() === '1' ? 'Administrador' : 'Cliente' }}
+        </span>
       </button>
 
       <mat-menu #userMenu="matMenu">
@@ -33,11 +46,17 @@
           <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #mainMenu="matMenu">
-          <button mat-menu-item routerLink="/cliente" *ngIf="authService.getStoredRol() === '1'">
+          <button mat-menu-item routerLink="/poliza">
+            <mat-icon>assignment</mat-icon>
+            <span>{{ authService.getStoredRol() === '1' ? 'Pólizas' : 'Mis Pólizas' }}</span>
+          </button>
+
+          <button mat-menu-item *ngIf="authService.getStoredRol() === '1'" routerLink="/cliente">
             <mat-icon>group</mat-icon> <span>Clientes</span>
           </button>
-          <button mat-menu-item routerLink="/poliza" *ngIf="authService.getStoredRol() === '1'">
-            <mat-icon>assignment</mat-icon> <span>Pólizas</span>
+
+          <button mat-menu-item *ngIf="authService.getStoredRol() === '2'" routerLink="/cliente/form">
+            <mat-icon>person</mat-icon> <span>Mi Perfil</span>
           </button>
         </mat-menu>
       </div>

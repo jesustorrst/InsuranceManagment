@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -38,15 +39,32 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
-          if (res.correct) {
-            this.router.navigate(['/poliza']);
+          if (res.correct && res.object) {
+            const user = res.object;
+
+            // GUARDAR DATOS CRÍTICOS
+            // Es vital guardar el idCliente para que el form lo use en el ngOnInit
+            localStorage.setItem('token', user.token);
+            localStorage.setItem('rol', user.rol.toString());
+
+            if (user.idCliente) {
+              localStorage.setItem('idCliente', user.idCliente.toString());
+            }
+
+            // REDIRECCIÓN DINÁMICA
+            if (user.rol.toString() === '1') {
+              this.router.navigate(['/poliza']);
+            } else {
+              // Al ir a /cliente/form, el componente hará: 
+              // id = localStorage.getItem('idCliente') y cargará los datos
+              this.router.navigate(['/cliente/form']);
+            }
           } else {
-            alert('Usuario o contraseña incorrectos');
+            Swal.fire('Error', 'Credenciales incorrectas', 'error');
           }
         },
         error: (err) => {
-          console.error('Error en login:', err);
-          alert('Error de conexión con el servidor');
+          Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
         }
       });
     }

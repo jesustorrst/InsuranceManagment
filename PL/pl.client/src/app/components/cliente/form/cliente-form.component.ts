@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ClienteService } from '../../../services/cliente.service';
 import { Cliente } from '../../../models/cliente.model';
+import { AuthService } from '../../../services/auth.service';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,13 +19,17 @@ export class ClienteFormComponent implements OnInit {
   form: FormGroup;
   idCliente?: number;
   isEdit: boolean = false;
+  idRol: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private _clienteService: ClienteService,
     private router: Router,
-    private aRoute: ActivatedRoute
+    private aRoute: ActivatedRoute,
+    public authService: AuthService
   ) {
+
+    this.idRol = this.authService.getStoredRol();
 
     this.form = this.fb.group({
       idCliente: [0],
@@ -35,7 +41,7 @@ export class ClienteFormComponent implements OnInit {
       ]],
       nombre: ['', [
         Validators.required,
-        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/) 
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)
       ]],
       apellidoPaterno: ['', [
         Validators.required,
@@ -79,19 +85,29 @@ export class ClienteFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const idClient = this.aRoute.snapshot.paramMap.get('id');
+    let idUrl = this.aRoute.snapshot.paramMap.get('id');
+    const idLogueado = this.authService.getStoredIdCliente();
 
-    if (idClient !== null) {
-      this.idCliente = parseInt(idClient, 10);
+    if (idUrl) {
+      this.idCliente = parseInt(idUrl, 10);
       this.isEdit = true;
       this.obtenerCliente(this.idCliente);
     }
+    else
+      if (this.idRol === '2' && idLogueado) {
+
+        this.idCliente = parseInt(idLogueado, 10);
+        this.isEdit = true;
+        this.obtenerCliente(this.idCliente);
+      }
+
+
   }
 
   obtenerCliente(idCliente: number) {
     this._clienteService.getById(idCliente).subscribe(result => {
       if (result.correct && result.object) {
-        this.form.patchValue(result.object); 
+        this.form.patchValue(result.object);
       }
     });
   }
@@ -104,8 +120,11 @@ export class ClienteFormComponent implements OnInit {
     if (this.isEdit) {
       this._clienteService.update(this.idCliente!, cliente).subscribe(res => {
         if (res.correct) {
-          Swal.fire('Actualizado', 'Cliente actualizado con éxito', 'success');
-          this.router.navigate(['/cliente']);
+          Swal.fire('Actualizado', 'Datos actualizados con éxito', 'success');
+
+          if (this.authService.getStoredRol() === '1') {
+            this.router.navigate(['/cliente']);
+          }
         }
       });
     } else {

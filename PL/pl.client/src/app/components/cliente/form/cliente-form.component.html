@@ -25,9 +25,11 @@
                   <input type="text"
                          class="form-control"
                          [class.is-invalid]="form.get('numeroIdentificacion')?.invalid && form.get('numeroIdentificacion')?.touched"
+                         [readonly]="isEdit && authService.getStoredRol() === '2'"
                          formControlName="numeroIdentificacion"
                          placeholder="10 dígitos numéricos"
-                         maxlength="10"> <div class="invalid-feedback text-start">
+                         maxlength="10">
+                  <div class="invalid-feedback text-start">
                     <span *ngIf="form.get('numeroIdentificacion')?.hasError('required')">
                       La identificación es obligatoria.
                     </span>
@@ -129,7 +131,10 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-5 pt-3 border-top">
-              <button type="button" class="btn btn-danger px-4 shadow-sm d-inline-flex align-items-center" routerLink="/cliente">
+              <button *ngIf="authService.getStoredRol() === '1'"
+                      type="button"
+                      class="btn btn-danger px-4 shadow-sm d-inline-flex align-items-center"
+                      routerLink="/cliente">
                 <i class="bi bi-x-circle me-2"></i> Cancelar
               </button>
               <button type="submit" class="btn btn-success px-4 shadow-sm d-inline-flex align-items-center" [disabled]="form.invalid">

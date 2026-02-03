@@ -57,7 +57,7 @@ namespace Business
                 Estado = dto.Estado,
 
                 FechaCreacion = DateTime.Now,
-                CreadoPor = 1,
+                CreadoPor = 5,
                 Eliminado = false
             };
 
@@ -83,7 +83,7 @@ namespace Business
             entidad.Estado = dto.Estado;
 
             entidad.FechaActualizacion = DateTime.Now;
-            entidad.ActualizadoPor = 1;
+            entidad.ActualizadoPor = 5;
 
             return await _polizaDAL.Update(entidad);
         }
@@ -111,7 +111,7 @@ namespace Business
 
             entidad.Eliminado = true;
             entidad.FechaActualizacion = DateTime.Now;
-            entidad.ActualizadoPor = 1;
+            entidad.ActualizadoPor = 5;
 
             return await _polizaDAL.Update(entidad);
         }

@@ -7,7 +7,7 @@ namespace PL.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "1")] 
+    [Authorize] 
     public class ClienteController : ControllerBase
     {
         private readonly Business.ClienteBLL _clienteService;
@@ -18,6 +18,7 @@ namespace PL.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _clienteService.GetAll();
@@ -34,6 +35,8 @@ namespace PL.Server.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "1")]
+
         public async Task<IActionResult> Post([FromBody] ClienteDTO clienteDTO)
         {
             if (clienteDTO == null)
@@ -72,8 +75,10 @@ namespace PL.Server.Controllers
         }
 
         [HttpPut("{id}")]
+
+
         public async Task<IActionResult> Put(int id, [FromBody] ClienteDTO clienteDTO)
-        {
+            {
             if (clienteDTO == null)
             {
                 return BadRequest("Los datos para la actualización son requeridos.");
@@ -92,6 +97,8 @@ namespace PL.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "1")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _clienteService.Delete(id);

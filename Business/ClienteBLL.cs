@@ -32,7 +32,7 @@ namespace Business
                 Telefono = dto.Telefono,
 
                 FechaCreacion = DateTime.Now,
-                CreadoPor = 1, //usuario logueado
+                CreadoPor = 5, //usuario logueado
                 Eliminado = false
             };
 
@@ -73,7 +73,7 @@ namespace Business
             entidad.Telefono = dto.Telefono;
 
             entidad.FechaActualizacion = DateTime.Now;
-            entidad.ActualizadoPor = 1; 
+            entidad.ActualizadoPor = 5; 
 
             return await _clienteDAL.Update(entidad);
         }
@@ -90,7 +90,7 @@ namespace Business
             var entidad = existingResult.Object;
             entidad.Eliminado = true; 
             entidad.FechaActualizacion = DateTime.Now;
-            entidad.ActualizadoPor = 1;
+            entidad.ActualizadoPor = 5;
 
             return await _clienteDAL.Update(entidad);
         }

@@ -97,15 +97,21 @@ export class GetallComponent implements OnInit {
     this.clienteSeleccionado = cliente;
     this.loadingPolizas = true;
 
-    // Reiniciamos los filtros cada que se cambia de cliente
+    // --- PASO 1: Limpieza preventiva ---
+    this.polizas = [];
+    this.polizasOriginal = [];
+    // ------------------------------------
+
     this.filtros = { tipo: '', estado: 'Todas', fechaInicio: '', fechaFin: '' };
 
     this.polizaService.getByIdCliente(cliente.idCliente).subscribe({
       next: (result) => {
-        if (result.correct && result.objects) {
-          this.polizasOriginal = result.objects; // Guardamos la fuente original
-          this.polizas = [...this.polizasOriginal]; // Mostramos todas inicialmente
+        // Verificamos que sea correcto Y que realmente existan objetos con longitud > 0
+        if (result.correct && result.objects && result.objects.length > 0) {
+          this.polizasOriginal = result.objects;
+          this.polizas = [...this.polizasOriginal];
         } else {
+          // --- PASO 2: Si no hay pólizas, aseguramos que quede vacío ---
           this.polizasOriginal = [];
           this.polizas = [];
         }
@@ -113,6 +119,8 @@ export class GetallComponent implements OnInit {
       },
       error: () => {
         this.loadingPolizas = false;
+        this.polizasOriginal = []; // Limpiar también en caso de error
+        this.polizas = [];
         Swal.fire('Error', 'No se pudieron obtener las pólizas', 'error');
       }
     });
