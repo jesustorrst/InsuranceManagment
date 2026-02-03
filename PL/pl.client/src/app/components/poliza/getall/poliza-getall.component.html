@@ -1,5 +1,5 @@
 <div class="container mt-5 pb-5">
-  <div class="card shadow-sm border-0 mb-4">
+  <div class="card shadow-sm border-0 mb-4" *ngIf="authService.getStoredRol() == '1'">
     <div class="card-header bg-white py-3 border-bottom">
       <h3 class="m-0 text-primary fw-bold">
         <i class="bi bi-people-fill me-2"></i>Seleccione un Cliente
@@ -35,8 +35,10 @@
   <div *ngIf="clienteSeleccionado" class="animate__animated animate__fadeIn">
     <div class="card shadow border-0 bg-light">
       <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
-        <h4 class="m-0">Pólizas de: {{ clienteSeleccionado.nombre }}</h4>
-        <button class="btn btn-light btn-sm fw-bold" [routerLink]="['/poliza/form', clienteSeleccionado.idCliente]">
+        <h4 class="m-0">Pólizas {{ clienteSeleccionado.nombre }}</h4>
+        <button *ngIf="authService.getStoredRol() === '1'"
+                class="btn btn-light btn-sm fw-bold"
+                [routerLink]="['/poliza/form', clienteSeleccionado.idCliente]">
           Nueva Póliza
         </button>
       </div>
@@ -97,11 +99,19 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <button class="btn btn-outline-warning btn-sm me-2" [routerLink]="['/poliza/form', clienteSeleccionado.idCliente, poliza.idPoliza]">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button class="btn btn-outline-danger btn-sm" (click)="eliminarPoliza(poliza.idPoliza)">
-                    <i class="bi bi-trash"></i>
+                  <ng-container *ngIf="authService.getStoredRol() === '1'">
+                    <button class="btn btn-outline-warning btn-sm me-2" [routerLink]="['/poliza/form', clienteSeleccionado.idCliente, poliza.idPoliza]">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="eliminarPoliza(poliza.idPoliza)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </ng-container>
+
+                  <button *ngIf="authService.getStoredRol() === '2' && poliza.estado === 'Activa'"
+                          class="btn btn-danger btn-sm"
+                          (click)="solicitarCancelacion(poliza.idPoliza)">
+                    Solicitar Cancelación
                   </button>
                 </td>
               </tr>

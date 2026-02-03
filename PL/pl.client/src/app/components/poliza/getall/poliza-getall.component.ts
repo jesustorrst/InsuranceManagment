@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // 1. IMPORTANTE: Para que funcione [(ngModel)]
+import { FormsModule } from '@angular/forms';
 import { ClienteService } from '../../../services/cliente.service';
 import { PolizaService } from '../../../services/poliza.service';
 import { Poliza } from '../../../models/poliza.model';
 import { Cliente } from '../../../models/cliente.model';
+import { AuthService } from '../../../services/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-poliza-getall',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule], // 2. IMPORTANTE: Agregado FormsModule
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './poliza-getall.component.html',
   styleUrls: ['./poliza-getall.component.css']
 })
@@ -19,13 +20,12 @@ export class GetallComponent implements OnInit {
 
   clientes: Cliente[] = [];
   polizas: Poliza[] = [];
-  polizasOriginal: Poliza[] = []; // 3. Respaldo para el filtrado local
+  polizasOriginal: Poliza[] = []; 
 
   public clienteSeleccionado: Cliente | null = null;
   loadingClientes: boolean = false;
   loadingPolizas: boolean = false;
 
-  // 4. Objeto para los filtros vinculados al HTML
   filtros = {
     tipo: '',
     estado: 'Todas',
@@ -35,11 +35,21 @@ export class GetallComponent implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
-    private polizaService: PolizaService
+    private polizaService: PolizaService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.cargarClientes();
+    const rol = this.authService.getStoredRol();
+    const idLogueado = this.authService.getStoredIdCliente();
+
+    if (rol === '2') {
+      const clienteFake = { idCliente: idLogueado, nombre: 'Cliente' } as any as Cliente;
+      this.seleccionarCliente(clienteFake);
+    } else {
+      this.cargarClientes();
+    }
+
   }
 
   cargarClientes(): void {
@@ -54,6 +64,29 @@ export class GetallComponent implements OnInit {
       error: () => {
         this.loadingClientes = false;
         Swal.fire('Error', 'No se pudieron obtener los clientes', 'error');
+      }
+    });
+  }
+
+  solicitarCancelacion(id: number): void {
+    Swal.fire({
+      title: '¿Deseas cancelar esta póliza?',
+      text: "Esta acción cambiará el estado a Inactiva",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Enviamos el objeto con el nuevo estado
+        this.polizaService.update(id, { estado: 'Inactiva' }).subscribe({
+          next: (res) => {
+            if (res.correct) {
+              Swal.fire('Cancelada', 'La póliza ha sido cancelada.', 'success');
+              if (this.clienteSeleccionado) this.seleccionarCliente(this.clienteSeleccionado);
+            }
+          }
+        });
       }
     });
   }

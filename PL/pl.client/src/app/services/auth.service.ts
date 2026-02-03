@@ -37,6 +37,11 @@ export class AuthService {
     return localStorage.getItem('rol');
   }
 
+  getStoredIdCliente(): string | null {
+    return localStorage.getItem('idCliente');
+  }
+
+
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('rol');
