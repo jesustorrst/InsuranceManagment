@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Models.DTO; // Asegúrate de tener PolizaDTO aquí
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Models.DTO; 
 
 namespace PL.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class PolizaController : ControllerBase
     {
         private readonly Business.PolizaBLL _polizaService;
@@ -19,18 +22,18 @@ namespace PL.Server.Controllers
         [HttpGet("GetByIdCliente/{idCliente}")]
         public async Task<IActionResult> GetByIdCliente(int idCliente)
         {
-            var result = await _polizaService.GetByIdCliente(idCliente);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            var userIdClienteClaim = User.Claims.FirstOrDefault(c => c.Type == "IdCliente")?.Value;
 
-            if (result.Correct)
+            if (userRole == "1" || userIdClienteClaim == idCliente.ToString())
             {
-                return Ok(result);
+                var result = await _polizaService.GetByIdCliente(idCliente);
+                
+                return result.Correct ? Ok(result) : BadRequest(result);
             }
-            else
-            {
-                return BadRequest(result);
-            }
+
+            return Forbid();
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -48,6 +51,7 @@ namespace PL.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Post([FromBody] PolizaDTO polizaDTO)
         {
             if (polizaDTO == null)
@@ -88,6 +92,7 @@ namespace PL.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _polizaService.Delete(id);

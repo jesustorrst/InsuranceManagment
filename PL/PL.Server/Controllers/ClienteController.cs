@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 
@@ -6,6 +7,7 @@ namespace PL.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "1")] 
     public class ClienteController : ControllerBase
     {
         private readonly Business.ClienteBLL _clienteService;
