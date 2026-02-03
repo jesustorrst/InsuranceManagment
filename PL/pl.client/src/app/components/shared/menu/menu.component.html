@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="navbar shadow-sm sticky-top">
+<mat-toolbar *ngIf="authService.isLoggedIn()" color="primary" class="navbar shadow-sm sticky-top">
   <div class="container d-flex align-items-center justify-content-between">
 
     <div class="brand d-flex align-items-center cursor-pointer" routerLink="/">
@@ -7,29 +7,40 @@
     </div>
 
     <nav class="d-none d-md-flex gap-2">
-      <button mat-button routerLink="/cliente" routerLinkActive="active-link">
+      <button mat-button *ngIf="authService.getStoredRol() === '1'" routerLink="/cliente" routerLinkActive="active-link">
         <mat-icon>group</mat-icon> Clientes
       </button>
-      <button mat-button routerLink="/poliza" routerLinkActive="active-link">
+      <button mat-button *ngIf="authService.getStoredRol() === '1'" routerLink="/poliza" routerLinkActive="active-link">
         <mat-icon>assignment</mat-icon> Pólizas
       </button>
     </nav>
 
-    <div class="d-flex d-md-none">
-      <button mat-icon-button [matMenuTriggerFor]="mainMenu">
-        <mat-icon>menu</mat-icon>
+    <div class="d-flex align-items-center">
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        <span class="ms-2 d-none d-sm-inline">{{ authService.getStoredRol() }}</span>
       </button>
 
-      <mat-menu #mainMenu="matMenu">
-        <button mat-menu-item routerLink="/cliente">
-          <mat-icon>group</mat-icon>
-          <span>Clientes</span>
-        </button>
-        <button mat-menu-item routerLink="/poliza">
-          <mat-icon>assignment</mat-icon>
-          <span>Pólizas</span>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="onLogout()">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>Cerrar Sesión</span>
         </button>
       </mat-menu>
+
+      <div class="d-md-none">
+        <button mat-icon-button [matMenuTriggerFor]="mainMenu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #mainMenu="matMenu">
+          <button mat-menu-item routerLink="/cliente" *ngIf="authService.getStoredRol() === '1'">
+            <mat-icon>group</mat-icon> <span>Clientes</span>
+          </button>
+          <button mat-menu-item routerLink="/poliza" *ngIf="authService.getStoredRol() === '1'">
+            <mat-icon>assignment</mat-icon> <span>Pólizas</span>
+          </button>
+        </mat-menu>
+      </div>
     </div>
 
   </div>

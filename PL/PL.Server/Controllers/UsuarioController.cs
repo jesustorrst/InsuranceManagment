@@ -32,13 +32,10 @@ namespace PL.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            // 1. Validar credenciales en la BLL
             var result = await _usuarioService.Login(loginDto);
 
             if (result.Correct)
             {
-                // 2. Si el login es correcto, generamos el Token aquí
-                // Pasamos el objeto AuthResponse que viene de la BLL para llenarle el Token
                 var authResponse = (AuthResponse)result.Object;
                 authResponse.Token = GenerarToken(authResponse);
 

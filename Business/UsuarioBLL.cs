@@ -23,8 +23,6 @@ namespace Business
 
         public async Task<Result<int>> Add(Models.DTO.UsuarioDTO dto)
         {
-            // 1. Mapeo y Hasheo de seguridad
-            // Convertimos el password plano en un Hash antes de que toque la base de datos
             var entidad = new Models.Entities.Usuario
             {
                 Email = dto.Email,
@@ -33,12 +31,9 @@ namespace Business
                 IdRol = dto.IdRol,
                 IdCliente = dto.IdCliente,
 
-                // Campos de auditoría similares a tus otros modelos
-                //FechaCreacion = DateTime.Now,
                 Activo = true
             };
 
-            // 2. Llamada al DAL que ya estructuramos
             return await _usuarioDAL.Add(entidad);
         }
 
@@ -50,15 +45,12 @@ namespace Business
             var result = new Result<AuthResponse>();
             try
             {
-                // 1. Buscamos el usuario en la DB a través del DAL
                 var resultDAL = await _usuarioDAL.GetByEmail(loginDto.Email);
 
                 if (resultDAL.Correct && resultDAL.Object != null)
                 {
                     var usuario = resultDAL.Object;
 
-                    // 2. Comparamos la contraseña (Texto Plano vs Hash)
-                    // Esta función de BCrypt es la que hace la magia
                     bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, usuario.PasswordHash);
 
                     if (isPasswordValid)
@@ -69,7 +61,7 @@ namespace Business
                             Email = usuario.Email,
                             IdCliente = usuario.IdCliente,
                             Rol = usuario.IdRol.ToString(),
-                            Token = "" // El Token lo llenaremos en el Controller
+                            Token = "" 
                         };
                     }
                     else
